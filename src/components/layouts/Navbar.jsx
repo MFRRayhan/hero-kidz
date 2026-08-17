@@ -1,6 +1,8 @@
 import React from "react";
 import Logo from "../Logo";
 import NavLink from "../NavLink";
+import { IoCartOutline } from "react-icons/io5";
+import Link from "next/link";
 
 export default function Navbar() {
   const navItems = (
@@ -21,7 +23,7 @@ export default function Navbar() {
   );
 
   return (
-    <div className="navbar">
+    <div className="navbar px-0">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -53,8 +55,13 @@ export default function Navbar() {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{navItems}</ul>
       </div>
-      <div className="navbar-end">
-        <a className="btn">Button</a>
+      <div className="navbar-end gap-2">
+        <Link href={"/cart"} className="btn btn-primary">
+          <IoCartOutline className="text-2xl"></IoCartOutline>
+        </Link>
+        <Link href={"/login"} className="btn btn-primary btn-outline">
+          Login
+        </Link>
       </div>
     </div>
   );
