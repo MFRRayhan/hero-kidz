@@ -5,7 +5,7 @@ import React from "react";
 export default function Banner() {
   return (
     <section className="flex items-center justify-between">
-      <div className="flex-1 space-y-2">
+      <div className="flex-1 space-y-5">
         <h2 className={`${mayaboti.className} text-6xl`}>
           আপনার শিশুকে দিন একটি{" "}
           <span className="text-primary">সুন্দর ভবিষ্যত</span>{" "}
