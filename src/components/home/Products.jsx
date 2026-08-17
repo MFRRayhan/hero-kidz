@@ -1,10 +1,9 @@
-import React from "react";
 import products from "@/data/toys.json";
 import ProductCard from "../cards/ProductCard";
 
-export default function Products() {
+export default function Products({ loading }) {
   return (
-    <section>
+    <section className="py-20">
       <h2 className="section-title">Our Products</h2>
 
       <div className="grid md:grid-cols-4 gap-6">

@@ -3,7 +3,7 @@ import Products from "@/components/home/Products";
 
 export default function Home() {
   return (
-    <div className="space-y-20">
+    <div>
       <Banner></Banner>
       <Products></Products>
     </div>

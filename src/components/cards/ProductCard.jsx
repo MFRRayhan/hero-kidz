@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
 import { IoCartOutline } from "react-icons/io5";
@@ -66,11 +67,19 @@ export default function ProductCard({ product }) {
           )}
         </div>
 
-        {/* Add to Cart */}
-        <button className="btn btn-primary btn-sm sm:btn-md w-full mt-2">
-          <IoCartOutline className="text-xl" />
-          Add to Cart
-        </button>
+        <div className="space-y-4">
+          {/* Add to Cart */}
+          <button className="btn btn-primary btn-sm sm:btn-md w-full mt-2">
+            <IoCartOutline className="text-xl" />
+            Add to Cart
+          </button>
+
+          <Link href={"/"}>
+            <button className="btn btn-primary btn-outline w-full">
+              View Details
+            </button>
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -35,6 +35,10 @@ h6 {
   @apply font-bold;
 }
 
+a:focus {
+  @apply outline-none;
+}
+
 .section-title {
   @apply text-4xl text-center mb-10;
 }
