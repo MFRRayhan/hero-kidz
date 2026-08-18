@@ -5,7 +5,7 @@ import { FaBangladeshiTakaSign } from "react-icons/fa6";
 import { IoCartOutline } from "react-icons/io5";
 
 export default function ProductCard({ product }) {
-  const { title, image, price, discount, reviews, ratings } = product;
+  const { _id, title, image, price, discount, reviews, ratings } = product;
 
   const discountedPrice = price - (price * discount) / 100;
 
@@ -74,7 +74,7 @@ export default function ProductCard({ product }) {
             Add to Cart
           </button>
 
-          <Link href={"/"}>
+          <Link href={`/products/${_id.toString()}`}>
             <button className="btn btn-primary btn-outline w-full">
               View Details
             </button>

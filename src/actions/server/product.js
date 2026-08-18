@@ -9,7 +9,7 @@ export const getProducts = async () => {
 };
 
 export const getSingleProduct = async (id) => {
-  if (!id || ObjectId.isValid(id)) return {};
+  if (!id || !ObjectId.isValid(id)) return {};
 
   const query = { _id: new ObjectId(id) };
   const product = await productsCollection.findOne(query);
