@@ -17,13 +17,14 @@ export default function Banner() {
         </p>
         <button className="btn btn-primary">Explore Products</button>
       </div>
-      <div className="flex-1">
+      <div className="flex-1 flex justify-end">
         <Image
           src={"/assets/hero.png"}
           alt="Hero-banner"
           width={500}
           height={400}
           className="w-auto h-auto"
+          loading="eager"
         />
       </div>
     </section>
