@@ -13,5 +13,5 @@ export const getSingleProduct = async (id) => {
 
   const query = { _id: new ObjectId(id) };
   const product = await productsCollection.findOne(query);
-  return product;
+  return { ...product, _id: id.toString() };
 };

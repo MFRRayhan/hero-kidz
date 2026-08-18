@@ -1,4 +1,5 @@
 import { getSingleProduct } from "@/actions/server/product";
+import CartBtn from "@/components/buttons/CartBtn";
 import Image from "next/image";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
@@ -192,10 +193,7 @@ export default async function ProductDetails({ params }) {
 
           {/* Add to Cart */}
           <div className="mt-8">
-            <button className="btn btn-primary btn-lg w-full sm:w-auto">
-              <IoCartOutline className="text-2xl" />
-              Add to Cart
-            </button>
+            <CartBtn product={product} />
           </div>
         </div>
       </div>
