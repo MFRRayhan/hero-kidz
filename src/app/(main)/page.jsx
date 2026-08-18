@@ -1,11 +1,12 @@
 import Banner from "@/components/home/Banner";
 import Products from "@/components/home/Products";
+import React from "react";
 
-export default function Home() {
+export default function Homepage() {
   return (
     <div>
-      <Banner></Banner>
-      <Products></Products>
+      <Banner />
+      <Products />
     </div>
   );
 }

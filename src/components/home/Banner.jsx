@@ -23,6 +23,7 @@ export default function Banner() {
           alt="Hero-banner"
           width={500}
           height={400}
+          className="w-auto h-auto"
         />
       </div>
     </section>

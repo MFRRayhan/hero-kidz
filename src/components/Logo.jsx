@@ -8,9 +8,10 @@ export default function Logo() {
       <Image
         src="/assets/logo.png"
         alt="logo"
-        width={50}
-        height={50}
-        className="w-12.5 h-auto"
+        width={40}
+        height={30}
+        className="w-auto h-auto"
+        loading="eager"
       />
 
       <h2>
