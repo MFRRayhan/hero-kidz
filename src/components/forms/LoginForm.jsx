@@ -1,8 +1,23 @@
 "use client";
-
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 
 export default function LoginForm() {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    console.log("LOGIN:", result);
+  };
+
   return (
     <main className="min-h-screen bg-base-200 flex items-center justify-center px-4 py-20">
       <div className="card w-full max-w-md bg-base-100 shadow-xl">
@@ -15,7 +30,7 @@ export default function LoginForm() {
             Login to your account
           </p>
 
-          <form className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-4">
             {/* Email */}
             <div className="form-control">
               <label className="label">
@@ -24,6 +39,7 @@ export default function LoginForm() {
 
               <input
                 type="email"
+                name="email"
                 placeholder="Enter your email"
                 className="input input-bordered w-full"
                 required
@@ -38,6 +54,7 @@ export default function LoginForm() {
 
               <input
                 type="password"
+                name="password"
                 placeholder="Enter your password"
                 className="input input-bordered w-full"
                 required

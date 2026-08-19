@@ -1,3 +1,4 @@
+import { loginUser } from "@/actions/server/auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions = {
@@ -6,20 +7,22 @@ export const authOptions = {
       name: "Credentials",
 
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: {
-          label: "Password",
-          type: "password",
-          placeholder: "*********",
-        },
-        email: {
-          label: "Email",
-          type: "email",
-          placeholder: "your@mail.com",
-        },
+        // username: { label: "Username", type: "text", placeholder: "jsmith" },
+        // password: {
+        //   label: "Password",
+        //   type: "password",
+        //   placeholder: "*********",
+        // },
+        // email: {
+        //   label: "Email",
+        //   type: "email",
+        //   placeholder: "your@mail.com",
+        // },
       },
       async authorize(credentials, req) {
-        return null;
+        const user = loginUser(credentials);
+        console.log("AUTH_OPTIONS:", result);
+        return user;
       },
     }),
   ],
