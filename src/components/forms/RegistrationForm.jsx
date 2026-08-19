@@ -1,5 +1,14 @@
 "use client";
+
+import Link from "next/link";
+
 export default function RegistrationForm() {
+  const handleRegistration = (e) => {
+    e.preventDefault();
+
+    console.log("Hello world");
+  };
+
   return (
     <main className="min-h-screen bg-base-200 flex items-center justify-center px-4 py-20">
       <div className="card w-full max-w-md bg-base-100 shadow-xl">
@@ -10,7 +19,7 @@ export default function RegistrationForm() {
             Sign up to get started
           </p>
 
-          <form className="space-y-4">
+          <form onSubmit={handleRegistration} className="space-y-4">
             {/* Name */}
             <div className="form-control">
               <label className="label">
@@ -82,9 +91,9 @@ export default function RegistrationForm() {
           {/* Login */}
           <p className="text-center text-sm mt-4">
             Already have an account?{" "}
-            <a href="/login" className="link link-primary font-semibold">
+            <Link href="/login" className="link link-primary font-semibold">
               Login
-            </a>
+            </Link>
           </p>
         </div>
       </div>
