@@ -1,12 +1,43 @@
 "use client";
-
+import { postUser } from "@/actions/server/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 export default function RegistrationForm() {
-  const handleRegistration = (e) => {
+  const router = useRouter();
+  const handleRegistration = async (e) => {
     e.preventDefault();
 
-    console.log("Hello world");
+    const name = e.target.name.value;
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    const payload = {
+      name,
+      email,
+      password,
+    };
+
+    const result = await postUser(payload);
+
+    if (result.success) {
+      Swal.fire({
+        icon: "success",
+        title: "Registration Successful!",
+        text: result.message,
+        confirmButtonText: "Continue",
+      });
+
+      e.target.reset();
+      router.push("/login");
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Registration failed!",
+        text: result.message,
+      });
+    }
   };
 
   return (
@@ -28,6 +59,7 @@ export default function RegistrationForm() {
 
               <input
                 type="text"
+                name="name"
                 placeholder="Enter your name"
                 className="input input-bordered w-full"
                 required
@@ -42,6 +74,7 @@ export default function RegistrationForm() {
 
               <input
                 type="email"
+                name="email"
                 placeholder="Enter your email"
                 className="input input-bordered w-full"
                 required
@@ -56,6 +89,7 @@ export default function RegistrationForm() {
 
               <input
                 type="password"
+                name="password"
                 placeholder="Create a password"
                 className="input input-bordered w-full"
                 required
