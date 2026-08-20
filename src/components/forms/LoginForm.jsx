@@ -1,11 +1,15 @@
 "use client";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Swal from "sweetalert2";
+import SocialBtn from "../SocialBtn";
 
 export default function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  console.log(searchParams);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -14,12 +18,12 @@ export default function LoginForm() {
     const password = e.target.password.value;
 
     const result = await signIn("credentials", {
-      redirect: false,
+      // redirect: false,
       email,
       password,
     });
 
-    console.log("LOGIN:", result);
+    // console.log("LOGIN:", result);
 
     if (result.ok && result.status === 200) {
       Swal.fire({
@@ -107,10 +111,7 @@ export default function LoginForm() {
 
           <div className="divider">OR</div>
 
-          {/* Google Login */}
-          <button className="btn btn-outline w-full">
-            Continue with Google
-          </button>
+          <SocialBtn />
 
           {/* Register */}
           <p className="text-center mt-4 text-sm">

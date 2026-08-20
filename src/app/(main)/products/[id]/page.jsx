@@ -3,7 +3,6 @@ import CartBtn from "@/components/buttons/CartBtn";
 import Image from "next/image";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
-import { IoCartOutline } from "react-icons/io5";
 
 const SITE_URL = "https://hero-kidz-indol.vercel.app";
 

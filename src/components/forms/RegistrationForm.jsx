@@ -3,6 +3,7 @@ import { postUser } from "@/actions/server/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import SocialBtn from "../SocialBtn";
 
 export default function RegistrationForm() {
   const router = useRouter();
@@ -118,9 +119,7 @@ export default function RegistrationForm() {
           <div className="divider">OR</div>
 
           {/* Google */}
-          <button className="btn btn-outline w-full">
-            Continue with Google
-          </button>
+          <SocialBtn />
 
           {/* Login */}
           <p className="text-center text-sm mt-4">

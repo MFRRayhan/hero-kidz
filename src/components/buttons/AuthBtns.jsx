@@ -18,7 +18,7 @@ export default function AuthBtns() {
   return (
     <>
       {session.status === "authenticated" ? (
-        <button onClick={handleSignOut} className="btn btn-primary btn-outline">
+        <button onClick={handleSignOut} className="btn btn-error btn-outline">
           Logout
         </button>
       ) : (
