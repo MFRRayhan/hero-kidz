@@ -1,8 +1,12 @@
 "use client";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 export default function LoginForm() {
+  const router = useRouter();
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -16,6 +20,25 @@ export default function LoginForm() {
     });
 
     console.log("LOGIN:", result);
+
+    if (result.ok && result.status === 200) {
+      Swal.fire({
+        icon: "success",
+        title: "Login Successful!",
+        text: "You are now logged in.",
+        confirmButtonText: "Continue",
+      });
+
+      router.push("/");
+      e.target.reset();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Login failed!",
+        text: "Email or password is incorrect.",
+        confirmButtonText: "Continue",
+      });
+    }
   };
 
   return (

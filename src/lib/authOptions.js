@@ -20,9 +20,14 @@ export const authOptions = {
         // },
       },
       async authorize(credentials, req) {
-        const user = loginUser(credentials);
-        console.log("AUTH_OPTIONS:", result);
-        return user;
+        const result = await loginUser(credentials);
+        console.log("LOGIN RESULT", result);
+
+        if (!result.success) {
+          return null;
+        }
+
+        return result.user;
       },
     }),
   ],

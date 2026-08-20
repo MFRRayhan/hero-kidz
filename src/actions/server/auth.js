@@ -15,7 +15,7 @@ export const postUser = async (payload) => {
       };
     }
 
-    // CHECK USER EXISTS
+    // USER EXISTS
     const userExists = await connect("users").findOne({ email });
 
     if (userExists) {
@@ -89,6 +89,12 @@ export const loginUser = async (payload) => {
     return {
       success: true,
       message: "Login successful",
+      user: {
+        id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     };
   } catch (error) {
     console.error("Login error:", error);
