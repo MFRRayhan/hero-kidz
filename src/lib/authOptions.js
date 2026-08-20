@@ -27,7 +27,7 @@ export const authOptions = {
           return null;
         }
 
-        return result.user;
+        return result;
       },
     }),
   ],

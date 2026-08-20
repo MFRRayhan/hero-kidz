@@ -79,23 +79,13 @@ export const loginUser = async (payload) => {
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordValid) {
+    if (isPasswordValid) {
       return {
-        success: false,
-        message: "Invalid password",
+        user,
+        success: true,
+        message: "Login successful",
       };
     }
-
-    return {
-      success: true,
-      message: "Login successful",
-      user: {
-        id: user._id.toString(),
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
-    };
   } catch (error) {
     console.error("Login error:", error);
 
