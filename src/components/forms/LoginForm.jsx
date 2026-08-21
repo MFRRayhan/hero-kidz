@@ -8,8 +8,9 @@ import SocialBtn from "../SocialBtn";
 export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
 
-  console.log(searchParams);
+  console.log("Search Params:", searchParams);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,27 +19,28 @@ export default function LoginForm() {
     const password = e.target.password.value;
 
     const result = await signIn("credentials", {
-      // redirect: false,
+      redirect: false,
       email,
       password,
+      callbackUrl,
     });
 
-    // console.log("LOGIN:", result);
+    console.log("LOGIN RESULT:", result);
+    console.log("CALLBACK URL:", callbackUrl);
 
-    if (result.ok && result.status === 200) {
-      Swal.fire({
+    if (result?.ok) {
+      await Swal.fire({
         icon: "success",
         title: "Login Successful!",
         text: "You are now logged in.",
         confirmButtonText: "Continue",
       });
 
-      router.push("/");
       e.target.reset();
     } else {
-      Swal.fire({
+      await Swal.fire({
         icon: "error",
-        title: "Login failed!",
+        title: "Login Failed!",
         text: "Email or password is incorrect.",
         confirmButtonText: "Continue",
       });
