@@ -6,9 +6,9 @@ import Swal from "sweetalert2";
 import SocialBtn from "../SocialBtn";
 
 export default function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const router = useRouter();
 
   console.log("Search Params:", searchParams);
 
@@ -28,6 +28,10 @@ export default function LoginForm() {
     console.log("LOGIN RESULT:", result);
     console.log("CALLBACK URL:", callbackUrl);
 
+    router.replace(callbackUrl);
+    router.refresh();
+    e.target.reset();
+
     if (result?.ok) {
       await Swal.fire({
         icon: "success",
@@ -35,8 +39,6 @@ export default function LoginForm() {
         text: "You are now logged in.",
         confirmButtonText: "Continue",
       });
-
-      e.target.reset();
     } else {
       await Swal.fire({
         icon: "error",

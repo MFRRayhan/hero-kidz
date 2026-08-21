@@ -88,10 +88,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <NextAuthProvider>
-      <html lang="en" className={`${poppins.className} h-full antialiased`}>
-        <body className="min-h-full flex flex-col">{children}</body>
-      </html>
-    </NextAuthProvider>
+    <html lang="en" className={`${poppins.className} h-full antialiased`}>
+      <body className="min-h-full flex flex-col">
+        <NextAuthProvider>{children}</NextAuthProvider>
+      </body>
+    </html>
   );
 }
