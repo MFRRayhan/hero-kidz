@@ -3,7 +3,7 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import Swal from "sweetalert2";
-import SocialBtn from "../SocialBtn";
+import SocialBtn from "../buttons/SocialBtn";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();

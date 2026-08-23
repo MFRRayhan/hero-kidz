@@ -3,7 +3,7 @@ import { postUser } from "@/actions/server/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import SocialBtn from "../SocialBtn";
+import SocialBtn from "../buttons/SocialBtn";
 
 export default function RegistrationForm() {
   const router = useRouter();
