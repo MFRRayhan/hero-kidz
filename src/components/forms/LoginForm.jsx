@@ -10,7 +10,44 @@ export default function LoginForm() {
   const callbackUrl = searchParams.get("callbackUrl") || "/";
   const router = useRouter();
 
-  console.log("Search Params:", searchParams);
+  // console.log("Search Params:", searchParams);
+
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+
+  //   const email = e.target.email.value;
+  //   const password = e.target.password.value;
+
+  //   const result = await signIn("credentials", {
+  //     redirect: false,
+  //     email,
+  //     password,
+  //     callbackUrl,
+  //   });
+
+  //   // console.log("LOGIN RESULT:", result);
+  //   // console.log("CALLBACK URL:", callbackUrl);
+
+  //   router.replace(callbackUrl);
+  //   router.refresh();
+  //   e.target.reset();
+
+  //   if (result?.ok) {
+  //     await Swal.fire({
+  //       icon: "success",
+  //       title: "Login Successful!",
+  //       text: "You are now logged in.",
+  //       confirmButtonText: "Continue",
+  //     });
+  //   } else {
+  //     await Swal.fire({
+  //       icon: "error",
+  //       title: "Login Failed!",
+  //       text: "Email or password is incorrect.",
+  //       confirmButtonText: "Continue",
+  //     });
+  //   }
+  // };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -19,34 +56,22 @@ export default function LoginForm() {
     const password = e.target.password.value;
 
     const result = await signIn("credentials", {
-      redirect: false,
       email,
       password,
       callbackUrl,
+      redirect: false,
     });
 
     console.log("LOGIN RESULT:", result);
-    console.log("CALLBACK URL:", callbackUrl);
+    router.push(result.url || callbackUrl || "/");
 
-    router.replace(callbackUrl);
-    router.refresh();
-    e.target.reset();
-
-    if (result?.ok) {
-      await Swal.fire({
-        icon: "success",
-        title: "Login Successful!",
-        text: "You are now logged in.",
-        confirmButtonText: "Continue",
-      });
-    } else {
-      await Swal.fire({
-        icon: "error",
-        title: "Login Failed!",
-        text: "Email or password is incorrect.",
-        confirmButtonText: "Continue",
-      });
+    if (!result.ok) {
+      await Swal.fire("Error", "e-mail & password not matched", "error");
+      return;
     }
+
+    await Swal.fire("Success", "Welcome to Hero Kidz", "success");
+    e.target.reset();
   };
 
   return (
