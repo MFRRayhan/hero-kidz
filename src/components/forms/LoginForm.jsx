@@ -62,7 +62,7 @@ export default function LoginForm() {
       redirect: false,
     });
 
-    console.log("LOGIN RESULT:", result);
+    // console.log("LOGIN RESULT:", result);
     router.push(result.url || callbackUrl || "/");
 
     if (!result.ok) {
@@ -140,7 +140,7 @@ export default function LoginForm() {
 
           <div className="divider">OR</div>
 
-          <SocialBtn />
+          <SocialBtn callbackUrl={callbackUrl} />
 
           {/* Register */}
           <p className="text-center mt-4 text-sm">
