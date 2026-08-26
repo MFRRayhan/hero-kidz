@@ -1,77 +1,86 @@
 "use client";
-import { signIn } from "next-auth/react";
+
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Swal from "sweetalert2";
 import SocialBtn from "../buttons/SocialBtn";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
   const router = useRouter();
+  const { status } = useSession();
 
-  // console.log("Search Params:", searchParams);
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const googleLogin = searchParams.get("googleLogin");
 
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
+  // Google login success handler
+  useEffect(() => {
+    if (status === "authenticated" && googleLogin === "true") {
+      const showSuccess = async () => {
+        await Swal.fire({
+          icon: "success",
+          title: "Login Successful!",
+          text: "Welcome to Hero Kidz",
+          confirmButtonText: "Continue",
+        });
 
-  //   const email = e.target.email.value;
-  //   const password = e.target.password.value;
+        router.replace(callbackUrl);
+        router.refresh();
+      };
 
-  //   const result = await signIn("credentials", {
-  //     redirect: false,
-  //     email,
-  //     password,
-  //     callbackUrl,
-  //   });
+      showSuccess();
+    }
+  }, [status, googleLogin, callbackUrl, router]);
 
-  //   // console.log("LOGIN RESULT:", result);
-  //   // console.log("CALLBACK URL:", callbackUrl);
-
-  //   router.replace(callbackUrl);
-  //   router.refresh();
-  //   e.target.reset();
-
-  //   if (result?.ok) {
-  //     await Swal.fire({
-  //       icon: "success",
-  //       title: "Login Successful!",
-  //       text: "You are now logged in.",
-  //       confirmButtonText: "Continue",
-  //     });
-  //   } else {
-  //     await Swal.fire({
-  //       icon: "error",
-  //       title: "Login Failed!",
-  //       text: "Email or password is incorrect.",
-  //       confirmButtonText: "Continue",
-  //     });
-  //   }
-  // };
-
+  // Credentials Login
   const handleLogin = async (e) => {
     e.preventDefault();
 
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      callbackUrl,
-      redirect: false,
-    });
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        callbackUrl,
+        redirect: false,
+      });
 
-    // console.log("LOGIN RESULT:", result);
-    router.push(result.url || callbackUrl || "/");
+      if (!result?.ok) {
+        await Swal.fire({
+          icon: "error",
+          title: "Login Failed!",
+          text: "Email or password is incorrect.",
+          confirmButtonText: "Continue",
+        });
 
-    if (!result.ok) {
-      await Swal.fire("Error", "e-mail & password not matched", "error");
-      return;
+        return;
+      }
+
+      await Swal.fire({
+        icon: "success",
+        title: "Login Successful!",
+        text: "Welcome to Hero Kidz",
+        confirmButtonText: "Continue",
+      });
+
+      e.target.reset();
+
+      router.replace(result.url || callbackUrl || "/");
+      router.refresh();
+    } catch (error) {
+      console.log("Login Error:", error);
+
+      await Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: error.message || "Something went wrong.",
+        confirmButtonText: "Continue",
+      });
     }
-
-    await Swal.fire("Success", "Welcome to Hero Kidz", "success");
-    e.target.reset();
   };
 
   return (
@@ -128,6 +137,7 @@ export default function LoginForm() {
             <div className="form-control">
               <label className="label cursor-pointer justify-start gap-3">
                 <input type="checkbox" className="checkbox checkbox-primary" />
+
                 <span className="label-text">Remember me</span>
               </label>
             </div>
