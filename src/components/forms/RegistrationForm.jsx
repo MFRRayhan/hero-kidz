@@ -26,33 +26,44 @@ export default function RegistrationForm() {
 
     const result = await postUser(payload);
 
-    if (result.success) {
-      const res = await signIn("credentials", {
-        name,
-        email,
-        password,
-        callbackUrl,
-        redirect: false,
-      });
-
-      if (res.ok) {
-        Swal.fire({
-          icon: "success",
-          title: "Registration Successful!",
-          text: result.message,
-          confirmButtonText: "Continue",
-        });
-
-        e.target.reset();
-        router.push(callbackUrl);
-      }
-    } else {
+    if (!result.success) {
       Swal.fire({
         icon: "error",
         title: "Registration failed!",
         text: result.message,
       });
+
+      return;
     }
+
+    const res = await signIn("credentials", {
+      name,
+      email,
+      password,
+      callbackUrl,
+      redirect: false,
+    });
+
+    if (!res?.ok) {
+      Swal.fire({
+        icon: "error",
+        title: "Login failed!",
+        text: res?.error || "Account created, but automatic login failed.",
+      });
+
+      return;
+    }
+
+    await Swal.fire({
+      icon: "success",
+      title: "Registration Successful!",
+      text: result.message,
+      confirmButtonText: "Continue",
+    });
+
+    e.target.reset();
+
+    router.push(callbackUrl);
   };
 
   return (

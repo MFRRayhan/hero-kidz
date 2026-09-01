@@ -1,16 +1,40 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import Swal from "sweetalert2";
 import SocialBtn from "../buttons/SocialBtn";
+import { useEffect } from "react";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
-
+  const session = useSession();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const googleLogin = searchParams.get("googleLogin");
+
+  console.log("SESSION:", session);
+
+  // Google Login Success Alert
+  useEffect(() => {
+    if (googleLogin !== "true") return;
+
+    const showGoogleSuccess = async () => {
+      await Swal.fire({
+        icon: "success",
+        title: "Login Successful!",
+        text: "Welcome back!",
+        confirmButtonText: "Continue",
+      });
+
+      // Remove googleLogin query parameter
+      router.replace(callbackUrl);
+      router.refresh();
+    };
+
+    showGoogleSuccess();
+  }, [googleLogin, callbackUrl, router]);
 
   // Credentials Login
   // const handleLogin = async (e) => {
@@ -67,20 +91,44 @@ export default function LoginForm() {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      callbackUrl,
-      redirect: false,
-    });
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        callbackUrl,
+        redirect: false,
+      });
 
-    if (!result.status === 200 || !result.ok) {
-      Swal.fire("Error", "Something went wrong", "error");
-    } else {
-      Swal.fire("Success", "Login successful", "success");
-      router.refresh();
-      router.push(callbackUrl);
+      if (!result?.ok) {
+        await Swal.fire({
+          icon: "error",
+          title: "Login Failed!",
+          text: result?.error || "Email or password is incorrect.",
+          confirmButtonText: "Continue",
+        });
+        return;
+      }
+
+      await Swal.fire({
+        icon: "success",
+        title: "Login Successful!",
+        text: "Welcome to Hero Kidz",
+        confirmButtonText: "Continue",
+      });
+
       e.target.reset();
+
+      router.replace(result.url || callbackUrl || "/");
+
+      router.refresh();
+    } catch (error) {
+      console.log("Login Error:", error);
+      await Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: error.message || "Something went wrong.",
+        confirmButtonText: "Continue",
+      });
     }
   };
 
