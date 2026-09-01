@@ -1,12 +1,16 @@
 "use client";
 import { postUser } from "@/actions/server/auth";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Swal from "sweetalert2";
 import SocialBtn from "../buttons/SocialBtn";
+import { signIn } from "next-auth/react";
 
 export default function RegistrationForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+
   const handleRegistration = async (e) => {
     e.preventDefault();
 
@@ -23,15 +27,25 @@ export default function RegistrationForm() {
     const result = await postUser(payload);
 
     if (result.success) {
-      Swal.fire({
-        icon: "success",
-        title: "Registration Successful!",
-        text: result.message,
-        confirmButtonText: "Continue",
+      const res = await signIn("credentials", {
+        name,
+        email,
+        password,
+        callbackUrl,
+        redirect: false,
       });
 
-      e.target.reset();
-      router.push("/login");
+      if (res.ok) {
+        Swal.fire({
+          icon: "success",
+          title: "Registration Successful!",
+          text: result.message,
+          confirmButtonText: "Continue",
+        });
+
+        e.target.reset();
+        router.push(callbackUrl);
+      }
     } else {
       Swal.fire({
         icon: "error",

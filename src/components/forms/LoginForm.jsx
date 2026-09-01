@@ -1,8 +1,7 @@
 "use client";
 
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Swal from "sweetalert2";
 import SocialBtn from "../buttons/SocialBtn";
@@ -10,76 +9,78 @@ import SocialBtn from "../buttons/SocialBtn";
 export default function LoginForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { status } = useSession();
 
   const callbackUrl = searchParams.get("callbackUrl") || "/";
-  const googleLogin = searchParams.get("googleLogin");
-
-  // Google login success handler
-  useEffect(() => {
-    if (status === "authenticated" && googleLogin === "true") {
-      const showSuccess = async () => {
-        await Swal.fire({
-          icon: "success",
-          title: "Login Successful!",
-          text: "Welcome to Hero Kidz",
-          confirmButtonText: "Continue",
-        });
-
-        router.replace(callbackUrl);
-        router.refresh();
-      };
-
-      showSuccess();
-    }
-  }, [status, googleLogin, callbackUrl, router]);
 
   // Credentials Login
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+
+  //   const email = e.target.email.value;
+  //   const password = e.target.password.value;
+
+  //   try {
+  //     const result = await signIn("credentials", {
+  //       email,
+  //       password,
+  //       callbackUrl,
+  //       redirect: false,
+  //     });
+
+  //     if (!result?.ok) {
+  //       await Swal.fire({
+  //         icon: "error",
+  //         title: "Login Failed!",
+  //         text: "Email or password is incorrect.",
+  //         confirmButtonText: "Continue",
+  //       });
+
+  //       return;
+  //     }
+
+  //     await Swal.fire({
+  //       icon: "success",
+  //       title: "Login Successful!",
+  //       text: "Welcome to Hero Kidz",
+  //       confirmButtonText: "Continue",
+  //     });
+
+  //     e.target.reset();
+
+  //     router.replace(result.url || callbackUrl || "/");
+  //     router.refresh();
+  //   } catch (error) {
+  //     console.log("Login Error:", error);
+
+  //     await Swal.fire({
+  //       icon: "error",
+  //       title: "Error!",
+  //       text: error.message || "Something went wrong.",
+  //       confirmButtonText: "Continue",
+  //     });
+  //   }
+  // };
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        callbackUrl,
-        redirect: false,
-      });
+    const result = await signIn("credentials", {
+      email,
+      password,
+      callbackUrl,
+      redirect: false,
+    });
 
-      if (!result?.ok) {
-        await Swal.fire({
-          icon: "error",
-          title: "Login Failed!",
-          text: "Email or password is incorrect.",
-          confirmButtonText: "Continue",
-        });
-
-        return;
-      }
-
-      await Swal.fire({
-        icon: "success",
-        title: "Login Successful!",
-        text: "Welcome to Hero Kidz",
-        confirmButtonText: "Continue",
-      });
-
-      e.target.reset();
-
-      router.replace(result.url || callbackUrl || "/");
+    if (!result.status === 200 || !result.ok) {
+      Swal.fire("Error", "Something went wrong", "error");
+    } else {
+      Swal.fire("Success", "Login successful", "success");
       router.refresh();
-    } catch (error) {
-      console.log("Login Error:", error);
-
-      await Swal.fire({
-        icon: "error",
-        title: "Error!",
-        text: error.message || "Something went wrong.",
-        confirmButtonText: "Continue",
-      });
+      router.push(callbackUrl);
+      e.target.reset();
     }
   };
 
@@ -155,7 +156,10 @@ export default function LoginForm() {
           {/* Register */}
           <p className="text-center mt-4 text-sm">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="link link-primary font-medium">
+            <Link
+              href={`/register?callbackUrl=${callbackUrl}`}
+              className="link link-primary font-medium"
+            >
               Create an account
             </Link>
           </p>

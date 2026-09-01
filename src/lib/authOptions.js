@@ -20,14 +20,21 @@ export const authOptions = {
         //   placeholder: "your@mail.com",
         // },
       },
+      // async authorize(credentials, req) {
+      //   const result = await loginUser(credentials);
+      //   console.log("LOGIN RESULT", result);
+
+      //   if (!result.success) {
+      //     return null;
+      //   }
+
+      //   return result;
+      // },
+
       async authorize(credentials, req) {
+        console.log("CREDENTIALS:", credentials);
         const result = await loginUser(credentials);
         console.log("LOGIN RESULT", result);
-
-        if (!result.success) {
-          return null;
-        }
-
         return result;
       },
     }),

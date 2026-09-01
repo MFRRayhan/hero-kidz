@@ -57,41 +57,61 @@ export const postUser = async (payload) => {
   }
 };
 
+// export const loginUser = async (payload) => {
+//   try {
+//     const { email, password } = payload;
+
+//     if (!email || !password) {
+//       return {
+//         success: false,
+//         message: "All fields are required",
+//       };
+//     }
+
+//     const user = await connect("users").findOne({ email });
+
+//     if (!user) {
+//       return {
+//         success: false,
+//         message: "User not found",
+//       };
+//     }
+
+//     const isPasswordValid = await bcrypt.compare(password, user.password);
+
+//     if (isPasswordValid) {
+//       return {
+//         user,
+//         success: true,
+//         message: "Login successful",
+//       };
+//     }
+//   } catch (error) {
+//     console.error("Login error:", error);
+
+//     return {
+//       success: false,
+//       message: "Something went wrong",
+//     };
+//   }
+// };
+
 export const loginUser = async (payload) => {
-  try {
-    const { email, password } = payload;
+  const { email, password } = payload;
 
-    if (!email || !password) {
-      return {
-        success: false,
-        message: "All fields are required",
-      };
-    }
+  if (!email || !password) return;
 
-    const user = await connect("users").findOne({ email });
+  const user = await connect("users").findOne({ email });
 
-    if (!user) {
-      return {
-        success: false,
-        message: "User not found",
-      };
-    }
+  if (!user) return;
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+  const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (isPasswordValid) {
-      return {
-        user,
-        success: true,
-        message: "Login successful",
-      };
-    }
-  } catch (error) {
-    console.error("Login error:", error);
-
+  if (isPasswordValid) {
     return {
-      success: false,
-      message: "Something went wrong",
+      user,
+      success: true,
+      message: "Login successfully",
     };
   }
 };
