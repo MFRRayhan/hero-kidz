@@ -2,7 +2,6 @@
 
 import { signIn } from "next-auth/react";
 import { FaGoogle } from "react-icons/fa";
-import Swal from "sweetalert2";
 
 export default function SocialBtn({ callbackUrl }) {
   const handleGoogleSignIn = async () => {

@@ -57,61 +57,41 @@ export const postUser = async (payload) => {
   }
 };
 
-// export const loginUser = async (payload) => {
-//   try {
-//     const { email, password } = payload;
-
-//     if (!email || !password) {
-//       return {
-//         success: false,
-//         message: "All fields are required",
-//       };
-//     }
-
-//     const user = await connect("users").findOne({ email });
-
-//     if (!user) {
-//       return {
-//         success: false,
-//         message: "User not found",
-//       };
-//     }
-
-//     const isPasswordValid = await bcrypt.compare(password, user.password);
-
-//     if (isPasswordValid) {
-//       return {
-//         user,
-//         success: true,
-//         message: "Login successful",
-//       };
-//     }
-//   } catch (error) {
-//     console.error("Login error:", error);
-
-//     return {
-//       success: false,
-//       message: "Something went wrong",
-//     };
-//   }
-// };
-
 export const loginUser = async (payload) => {
-  const { email, password } = payload;
+  try {
+    const { email, password } = payload;
 
-  if (!email || !password) return;
+    if (!email || !password) {
+      return {
+        success: false,
+        message: "All fields are required",
+      };
+    }
 
-  const user = await connect("users").findOne({ email });
+    const user = await connect("users").findOne({ email });
 
-  if (!user) return;
+    if (!user) {
+      return {
+        success: false,
+        message: "User not found",
+      };
+    }
 
-  const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-  if (isPasswordValid) {
+    if (isPasswordValid) {
+      return {
+        user,
+        success: true,
+        message: "Login successful",
+      };
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+
     return {
-      user,
-      success: true,
-      message: "Login successfully",
+      success: false,
+      message: "Something went wrong",
     };
   }
 };

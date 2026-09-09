@@ -33,10 +33,18 @@ export const authOptions = {
       // },
 
       async authorize(credentials, req) {
-        console.log("CREDENTIALS:", credentials);
+        // console.log("CREDENTIALS:", credentials);
         const result = await loginUser(credentials);
-        console.log("LOGIN RESULT", result);
-        return result;
+        // console.log("LOGIN RESULT", result);
+
+        if (!result?.success) return null;
+
+        return {
+          id: result?.user?._id.toString(),
+          name: result?.user?.name,
+          email: result?.user?.email,
+          role: result?.user?.role,
+        };
       },
     }),
 
@@ -48,11 +56,11 @@ export const authOptions = {
 
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      console.log("SIGN IN:", { user, account, profile, email, credentials });
+      // console.log("SIGN IN:", { user, account, profile, email, credentials });
 
       const userExists = await connect("users").findOne({
         email: user?.email,
-        provider: account?.provider,
+        // provider: account?.provider,
       });
 
       if (userExists) return true;
@@ -73,11 +81,28 @@ export const authOptions = {
     // async redirect({ url, baseUrl }) {
     //   return baseUrl;
     // },
-    // async session({ session, token, user }) {
-    //   return session;
-    // },
-    // async jwt({ token, user, account, profile, isNewUser }) {
-    //   return token;
-    // },
+    async session({ session, token, user }) {
+      if (token) {
+        session.email = token?.email;
+        session.role = token?.role;
+      }
+
+      return session;
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      if (user) {
+        if (account.provider === "google") {
+          const dbUser = await connect("users").findOne({ email: user.email });
+
+          token.email = dbUser?.email;
+          token.role = dbUser?.role;
+        } else {
+          token.email = user?.email;
+          token.role = user?.role;
+        }
+      }
+
+      return token;
+    },
   },
 };

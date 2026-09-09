@@ -14,7 +14,7 @@ export default function LoginForm() {
   const callbackUrl = searchParams.get("callbackUrl") || "/";
   const googleLogin = searchParams.get("googleLogin");
 
-  console.log("SESSION:", session);
+  // console.log("SESSION:", session);
 
   // Google Login Success Alert
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function LoginForm() {
         confirmButtonText: "Continue",
       });
 
-      // Remove googleLogin query parameter
+      // Redirect to the original destination
       router.replace(callbackUrl);
       router.refresh();
     };
@@ -36,55 +36,7 @@ export default function LoginForm() {
     showGoogleSuccess();
   }, [googleLogin, callbackUrl, router]);
 
-  // Credentials Login
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-
-  //   const email = e.target.email.value;
-  //   const password = e.target.password.value;
-
-  //   try {
-  //     const result = await signIn("credentials", {
-  //       email,
-  //       password,
-  //       callbackUrl,
-  //       redirect: false,
-  //     });
-
-  //     if (!result?.ok) {
-  //       await Swal.fire({
-  //         icon: "error",
-  //         title: "Login Failed!",
-  //         text: "Email or password is incorrect.",
-  //         confirmButtonText: "Continue",
-  //       });
-
-  //       return;
-  //     }
-
-  //     await Swal.fire({
-  //       icon: "success",
-  //       title: "Login Successful!",
-  //       text: "Welcome to Hero Kidz",
-  //       confirmButtonText: "Continue",
-  //     });
-
-  //     e.target.reset();
-
-  //     router.replace(result.url || callbackUrl || "/");
-  //     router.refresh();
-  //   } catch (error) {
-  //     console.log("Login Error:", error);
-
-  //     await Swal.fire({
-  //       icon: "error",
-  //       title: "Error!",
-  //       text: error.message || "Something went wrong.",
-  //       confirmButtonText: "Continue",
-  //     });
-  //   }
-  // };
-
+  // CREDENTIALS LOGIN
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -103,7 +55,7 @@ export default function LoginForm() {
         await Swal.fire({
           icon: "error",
           title: "Login Failed!",
-          text: result?.error || "Email or password is incorrect.",
+          text: "Email or password is incorrect. Please try again with valid credentials or register.",
           confirmButtonText: "Continue",
         });
         return;
@@ -119,7 +71,6 @@ export default function LoginForm() {
       e.target.reset();
 
       router.replace(result.url || callbackUrl || "/");
-
       router.refresh();
     } catch (error) {
       console.log("Login Error:", error);

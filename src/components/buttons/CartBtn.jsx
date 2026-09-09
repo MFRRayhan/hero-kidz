@@ -1,25 +1,24 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { IoCartOutline } from "react-icons/io5";
 
 export default function CartBtn({ product }) {
-  const isLoggedIn = false;
-
   const pathname = usePathname();
   const router = useRouter();
+  const { status } = useSession();
+  console.log(status);
 
   const handleCart = () => {
-    if (!isLoggedIn) {
+    if (status === "loading") return;
+
+    if (status === "unauthenticated") {
       const callbackUrl = encodeURIComponent(pathname);
-
       router.push(`/login?callbackUrl=${callbackUrl}`);
-
       return;
     }
 
-    // User logged in হলে এখানে
-    // Add to Cart logic থাকবে
     console.log("Add to cart:", product);
   };
 
