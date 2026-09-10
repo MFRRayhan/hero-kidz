@@ -1,30 +1,49 @@
 "use client";
 
+import { handleCart } from "@/actions/server/cart";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { IoCartOutline } from "react-icons/io5";
+import Swal from "sweetalert2";
 
 export default function CartBtn({ product }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { status } = useSession();
-  console.log(status);
+  // const { status } = useSession();
+  const session = useSession();
+  const isAuthenticated = session?.status === "authenticated";
 
-  const handleCart = () => {
-    if (status === "loading") return;
+  // console.log("Status:", status);
 
-    if (status === "unauthenticated") {
-      const callbackUrl = encodeURIComponent(pathname);
-      router.push(`/login?callbackUrl=${callbackUrl}`);
-      return;
+  // const handleAddToCart = () => {
+  //   if (status === "loading") return;
+
+  //   if (status === "unauthenticated") {
+  //     const callbackUrl = encodeURIComponent(pathname);
+  //     router.push(`/login?callbackUrl=${callbackUrl}`);
+  //     return;
+  //   }
+
+  //   console.log("Add to cart:", product);
+  // };
+
+  const handleAddToCart = async () => {
+    if (isAuthenticated) {
+      const result = await handleCart({ product, inc: true });
+
+      if (result.success) {
+        Swal.fire("Add to cart", product.title, "success");
+      } else {
+        Swal.fire("oops!", "Something went wrong", "error");
+      }
+    } else {
+      router.push(`/login?callbackUrl=${pathname}`);
     }
-
-    console.log("Add to cart:", product);
   };
 
   return (
     <button
-      onClick={handleCart}
+      onClick={handleAddToCart}
       className="btn btn-primary btn-sm sm:btn-md w-full mt-2"
     >
       <IoCartOutline className="text-xl" />
