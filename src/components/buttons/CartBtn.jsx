@@ -3,6 +3,7 @@
 import { handleCart } from "@/actions/server/cart";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 import { IoCartOutline } from "react-icons/io5";
 import Swal from "sweetalert2";
 
@@ -12,6 +13,7 @@ export default function CartBtn({ product }) {
   // const { status } = useSession();
   const session = useSession();
   const isAuthenticated = session?.status === "authenticated";
+  const [isLoading, setIsLoading] = useState(false);
 
   // console.log("Status:", status);
 
@@ -29,12 +31,33 @@ export default function CartBtn({ product }) {
 
   const handleAddToCart = async () => {
     if (isAuthenticated) {
+      setIsLoading(true);
       const result = await handleCart({ product, inc: true });
 
+      // if (result.success) {
+      //   Swal.fire("Add to cart", product.title, "success");
+      // } else {
+      //   Swal.fire("oops!", "Something went wrong", "error");
+      // }
+
       if (result.success) {
-        Swal.fire("Add to cart", product.title, "success");
+        Swal.fire({
+          icon: "success",
+          title: "Added to cart",
+          text: `${product.title} has been added to your cart.`,
+          showConfirmButton: false,
+          timer: 1800,
+          timerProgressBar: true,
+        });
+        setIsLoading(false);
       } else {
-        Swal.fire("oops!", "Something went wrong", "error");
+        Swal.fire({
+          icon: "error",
+          title: "Unable to add item",
+          text: "Something went wrong. Please try again.",
+          confirmButtonText: "Try Again",
+        });
+        setIsLoading(false);
       }
     } else {
       router.push(`/login?callbackUrl=${pathname}`);
@@ -43,6 +66,7 @@ export default function CartBtn({ product }) {
 
   return (
     <button
+      disabled={session?.status === "loading" || isLoading}
       onClick={handleAddToCart}
       className="btn btn-primary btn-sm sm:btn-md w-full mt-2"
     >

@@ -47,3 +47,13 @@ export const handleCart = async ({ product, inc = true }) => {
     return { success: result.acknowledged };
   }
 };
+
+export const getCartItems = async () => {
+  const { user } = (await getServerSession(authOptions)) || {};
+  if (!user) return [];
+
+  const query = { email: user?.email };
+  const result = await cartCollections.find(query).toArray();
+
+  return result;
+};
