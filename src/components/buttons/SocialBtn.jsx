@@ -16,7 +16,7 @@ export default function SocialBtn({ callbackUrl }) {
     <button
       type="button"
       onClick={handleGoogleSignIn}
-      className="btn btn-outline w-full flex items-center"
+      className="btn btn-outline w-full flex items-center rounded-full"
     >
       <FaGoogle />
       Continue with Google

@@ -1,4 +1,5 @@
 "use client";
+
 import { postUser } from "@/actions/server/auth";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -9,6 +10,7 @@ import { signIn } from "next-auth/react";
 export default function RegistrationForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+
   const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const handleRegistration = async (e) => {
@@ -31,6 +33,7 @@ export default function RegistrationForm() {
         icon: "error",
         title: "Registration failed!",
         text: result.message,
+        confirmButtonText: "Try Again",
       });
 
       return;
@@ -49,6 +52,7 @@ export default function RegistrationForm() {
         icon: "error",
         title: "Login failed!",
         text: res?.error || "Account created, but automatic login failed.",
+        confirmButtonText: "Continue",
       });
 
       return;
@@ -63,69 +67,68 @@ export default function RegistrationForm() {
 
     e.target.reset();
 
-    router.push(callbackUrl);
+    router.replace(callbackUrl);
+    router.refresh();
   };
 
   return (
     <main className="min-h-screen bg-base-200 flex items-center justify-center px-4 py-20">
       <div className="card w-full max-w-md bg-base-100 shadow-xl">
         <div className="card-body">
-          <h2 className="text-3xl font-bold text-center">Create an Account</h2>
+          {/* Heading */}
+          <h2 className="card-title text-3xl justify-center">
+            Create an Account
+          </h2>
 
-          <p className="text-center text-base-content/60 mb-6">
+          <p className="text-center text-base-content/60">
             Sign up to get started
           </p>
 
-          <form onSubmit={handleRegistration} className="space-y-4">
+          <form onSubmit={handleRegistration} className="space-y-2">
             {/* Name */}
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Name</span>
-              </label>
+            <fieldset className="fieldset">
+              <label className="fieldset-legend">Name</label>
 
               <input
                 type="text"
                 name="name"
                 placeholder="Enter your name"
-                className="input input-bordered w-full"
+                className="input input-bordered w-full rounded-full border-2"
                 required
               />
-            </div>
+            </fieldset>
 
             {/* Email */}
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Email</span>
-              </label>
+            <fieldset className="fieldset">
+              <label className="fieldset-legend">Email</label>
 
               <input
                 type="email"
                 name="email"
                 placeholder="Enter your email"
-                className="input input-bordered w-full"
+                className="input input-bordered w-full rounded-full border-2"
                 required
               />
-            </div>
+            </fieldset>
 
             {/* Password */}
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Password</span>
-              </label>
+            <fieldset className="fieldset">
+              <label className="fieldset-legend">Password</label>
 
               <input
                 type="password"
                 name="password"
                 placeholder="Create a password"
-                className="input input-bordered w-full"
+                className="input input-bordered w-full rounded-full border-2"
                 required
               />
-            </div>
+            </fieldset>
 
-            {/* Terms */}
+            {/* Terms & Conditions */}
             <label className="label cursor-pointer justify-start gap-3">
               <input
                 type="checkbox"
+                name="terms"
                 className="checkbox checkbox-primary"
                 required
               />
@@ -136,20 +139,27 @@ export default function RegistrationForm() {
             </label>
 
             {/* Register Button */}
-            <button type="submit" className="btn btn-primary w-full">
+            <button
+              type="submit"
+              className="btn btn-primary w-full rounded-full"
+            >
               Create Account
             </button>
           </form>
 
+          {/* Divider */}
           <div className="divider">OR</div>
 
-          {/* Google */}
-          <SocialBtn />
+          {/* Google Login */}
+          <SocialBtn callbackUrl={callbackUrl} />
 
           {/* Login */}
-          <p className="text-center text-sm mt-4">
+          <p className="text-center mt-4 text-sm">
             Already have an account?{" "}
-            <Link href="/login" className="link link-primary font-semibold">
+            <Link
+              href={`/login?callbackUrl=${callbackUrl}`}
+              className="link link-primary font-medium"
+            >
               Login
             </Link>
           </p>

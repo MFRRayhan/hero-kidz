@@ -87,63 +87,59 @@ export default function LoginForm() {
     <main className="min-h-screen bg-base-200 flex items-center justify-center px-4 py-20">
       <div className="card w-full max-w-md bg-base-100 shadow-xl">
         <div className="card-body">
-          <h2 className="card-title text-3xl justify-center mb-2">
-            Welcome Back
-          </h2>
+          <h2 className="card-title text-3xl justify-center">Welcome Back</h2>
 
-          <p className="text-center text-base-content/60 mb-6">
+          <p className="text-center text-base-content/60">
             Login to your account
           </p>
 
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-2">
             {/* Email */}
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Email</span>
-              </label>
+            <fieldset className="fieldset">
+              <label className="fieldset-legend">Email</label>
 
               <input
                 type="email"
                 name="email"
                 placeholder="Enter your email"
-                className="input input-bordered w-full"
+                className="input input-bordered w-full rounded-full border-2"
                 required
               />
-            </div>
+            </fieldset>
 
             {/* Password */}
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Password</span>
-              </label>
+            <fieldset className="fieldset">
+              <label className="fieldset-legend">Password</label>
 
               <input
                 type="password"
                 name="password"
                 placeholder="Enter your password"
-                className="input input-bordered w-full"
+                className="input input-bordered w-full rounded-full border-2"
                 required
               />
 
-              <Link
-                href="#"
-                className="label-text-alt link link-primary text-xs"
-              >
+              <Link href="#" className="link link-primary mt-1 text-xs">
                 Forgot password?
               </Link>
-            </div>
+            </fieldset>
 
             {/* Remember me */}
-            <div className="form-control">
-              <label className="label cursor-pointer justify-start gap-3">
-                <input type="checkbox" className="checkbox checkbox-primary" />
+            <label className="label cursor-pointer justify-start gap-3">
+              <input
+                type="checkbox"
+                name="remember"
+                className="checkbox checkbox-primary"
+              />
 
-                <span className="label-text">Remember me</span>
-              </label>
-            </div>
+              <span className="label-text">Remember me</span>
+            </label>
 
             {/* Login Button */}
-            <button type="submit" className="btn btn-primary w-full">
+            <button
+              type="submit"
+              className="btn btn-primary w-full rounded-full"
+            >
               Login
             </button>
           </form>

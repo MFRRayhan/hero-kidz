@@ -42,6 +42,10 @@ a:focus {
   @apply outline-none;
 }
 
+input:focus {
+  @apply border-2 border-primary outline-none;
+}
+
 .section-title {
   @apply text-4xl text-center mb-10;
 }
