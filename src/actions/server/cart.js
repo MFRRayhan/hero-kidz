@@ -2,7 +2,10 @@
 
 import { authOptions } from "@/lib/authOptions";
 import { connect } from "@/lib/dbConnect";
+import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
+import { cache } from "react";
 
 const cartCollections = connect("cart");
 
@@ -55,5 +58,18 @@ export const getCartItems = async () => {
   const query = { email: user?.email };
   const result = await cartCollections.find(query).toArray();
 
-  return result;
+  return result.map((item) => ({ ...item, _id: item._id.toString() }));
 };
+
+export const removeCartItem = cache(async (id) => {
+  const { user } = (await getServerSession(authOptions)) || {};
+  if (!user) return { success: false };
+  const query = { _id: new ObjectId(id) };
+  const result = await cartCollections.deleteOne(query);
+
+  if (Boolean(result.deletedCount)) {
+    revalidatePath("./cart.js");
+  }
+
+  return { success: Boolean(result.deletedCount) };
+});
