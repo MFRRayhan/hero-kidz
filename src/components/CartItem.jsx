@@ -18,8 +18,8 @@ export default function CartItem({ cartItem, onIncrease, onDecrease }) {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
+    }).then(async (swalResult) => {
+      if (swalResult.isConfirmed) {
         const result = await removeCartItem(_id);
 
         if (result.success) {
