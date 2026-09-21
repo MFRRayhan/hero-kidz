@@ -1,4 +1,4 @@
-import Products from "@/components/home/Products";
+import Products from "@/components/sections/Products";
 import React from "react";
 
 export const metadata = {

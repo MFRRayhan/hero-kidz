@@ -34,7 +34,7 @@ export default function CartItem({ cartItem, onIncrease, onDecrease }) {
   };
 
   return (
-    <div className="flex items-center gap-4 rounded-xl border border-base-300 bg-base-100 p-4 shadow-sm">
+    <div className="flex items-center gap-4 rounded-xl border border-base-300 bg-base-100 p-4 shadow-sm mb-5">
       {/* Product Image */}
       <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg">
         <Image src={image} alt={title} fill className="object-cover" />

@@ -1,5 +1,5 @@
-import Banner from "@/components/home/Banner";
-import Products from "@/components/home/Products";
+import Banner from "@/components/sections/Banner";
+import Products from "@/components/sections/Products";
 import Test from "@/components/Test";
 import { authOptions } from "@/lib/authOptions";
 import { getServerSession } from "next-auth";
