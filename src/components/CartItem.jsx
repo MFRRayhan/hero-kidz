@@ -2,11 +2,16 @@
 
 import { removeCartItem } from "@/actions/server/cart";
 import Image from "next/image";
-import { FaTrash } from "react-icons/fa";
+import { FaMinus, FaPlus, FaTrash } from "react-icons/fa";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
 import Swal from "sweetalert2";
 
-export default function CartItem({ cartItem, onIncrease, onDecrease }) {
+export default function CartItem({
+  cartItem,
+  onIncrease,
+  onDecrease,
+  onRemove,
+}) {
   const { title, image, price, quantity, _id } = cartItem;
 
   const handleRemoveCartItem = async () => {
@@ -23,6 +28,8 @@ export default function CartItem({ cartItem, onIncrease, onDecrease }) {
         const result = await removeCartItem(_id);
 
         if (result.success) {
+          onRemove(_id);
+
           Swal.fire({
             title: "Deleted!",
             text: "Your file has been deleted.",
@@ -55,7 +62,7 @@ export default function CartItem({ cartItem, onIncrease, onDecrease }) {
             disabled={quantity <= 1}
             className="btn btn-sm btn-outline"
           >
-            -
+            <FaMinus />
           </button>
 
           <span className="min-w-8 text-center font-semibold">{quantity}</span>
@@ -64,7 +71,7 @@ export default function CartItem({ cartItem, onIncrease, onDecrease }) {
             onClick={() => onIncrease(cartItem)}
             className="btn btn-sm btn-outline"
           >
-            +
+            <FaPlus />
           </button>
         </div>
       </div>
