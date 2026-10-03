@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import CartItem from "../CartItem";
 
 export default function ClientCart({ cartItems = [] }) {
   const [items, setItems] = useState(cartItems);
-  const totalItems = items.reduce((acm, item) => acm + item.quantity, 0);
+  const totalItems = useMemo(() => {
+    items.reduce((acm, item) => acm + item.quantity, 0);
+  }, [items]);
 
   const handleRemove = (id) => {
     setItems((prevItems) => prevItems.filter((item) => item._id !== id));
