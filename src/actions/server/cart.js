@@ -80,3 +80,25 @@ export const removeCartItem = async (id) => {
     success: Boolean(result.deletedCount),
   };
 };
+export const incrementCartItem = async (id, quantity) => {
+  const { user } = (await getServerSession(authOptions)) || {};
+  if (!user) return [];
+
+  if (quantity > 10) {
+    return {
+      success: false,
+      message: "You can only buy up to 10 units of this product at a time.",
+    };
+  }
+
+  const query = { _id: new ObjectId(id) };
+  const updateOne = {
+    $inc: {
+      quantity: 1,
+    },
+  };
+
+  const result = await cartCollections.updateOne(query, updateOne);
+
+  return { success: Boolean(result.modifiedCount) };
+};
