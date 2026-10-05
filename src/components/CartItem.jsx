@@ -44,6 +44,12 @@ export default function CartItem({ cartItem, updateQty, onRemove }) {
 
     if (result.success) {
       updateQty(_id, quantity + 1);
+    } else if (result.message) {
+      Swal.fire({
+        icon: "warning",
+        title: "Maximum limit reached",
+        text: result.message,
+      });
     }
   };
 
@@ -82,7 +88,11 @@ export default function CartItem({ cartItem, updateQty, onRemove }) {
 
           <span className="min-w-8 text-center font-semibold">{quantity}</span>
 
-          <button onClick={onIncrease} className="btn btn-sm btn-outline">
+          <button
+            onClick={onIncrease}
+            // disabled={quantity >= 10}
+            className="btn btn-sm btn-outline"
+          >
             <FaPlus />
           </button>
         </div>

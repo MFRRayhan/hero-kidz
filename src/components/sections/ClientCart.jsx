@@ -6,7 +6,7 @@ import CartItem from "../CartItem";
 export default function ClientCart({ cartItems = [] }) {
   const [items, setItems] = useState(cartItems);
   const totalItems = useMemo(() => {
-    items.reduce((acm, item) => acm + item.quantity, 0);
+    return items.reduce((acm, item) => acm + item.quantity, 0);
   }, [items]);
 
   const handleRemove = (id) => {
