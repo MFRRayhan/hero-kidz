@@ -5,9 +5,15 @@ import CartItem from "../CartItem";
 
 export default function ClientCart({ cartItems = [] }) {
   const [items, setItems] = useState(cartItems);
+
   const totalItems = useMemo(() => {
     return items.reduce((acm, item) => acm + item.quantity, 0);
   }, [items]);
+
+  const totalPrice = useMemo(
+    () => items.reduce((acm, item) => acm + item.price * item.quantity, 0),
+    [items],
+  );
 
   const handleRemove = (id) => {
     setItems((prevItems) => prevItems.filter((item) => item._id !== id));
@@ -38,6 +44,7 @@ export default function ClientCart({ cartItems = [] }) {
           ))}
         </div>
         <div className="flex-1">Total Items - {totalItems}</div>
+        <div className="flex-1">Total Amount - {Math.round(totalPrice)}</div>
       </div>
     </>
   );

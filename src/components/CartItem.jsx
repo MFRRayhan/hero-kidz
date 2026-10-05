@@ -6,12 +6,14 @@ import {
   removeCartItem,
 } from "@/actions/server/cart";
 import Image from "next/image";
+import { useState } from "react";
 import { FaMinus, FaPlus, FaTrash } from "react-icons/fa";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
 import Swal from "sweetalert2";
 
 export default function CartItem({ cartItem, updateQty, onRemove }) {
   const { title, image, price, quantity, _id } = cartItem;
+  const [loading, setLoading] = useState(false);
 
   const handleRemoveCartItem = async () => {
     Swal.fire({
@@ -40,6 +42,7 @@ export default function CartItem({ cartItem, updateQty, onRemove }) {
   };
 
   const onIncrease = async () => {
+    setLoading(true);
     const result = await incrementCartItem(_id, quantity);
 
     if (result.success) {
@@ -51,14 +54,18 @@ export default function CartItem({ cartItem, updateQty, onRemove }) {
         text: result.message,
       });
     }
+    setLoading(false);
   };
 
   const onDecrease = async () => {
+    setLoading(true);
     const result = await decrementCartItem(_id, quantity);
 
     if (result.success) {
       updateQty(_id, quantity - 1);
     }
+
+    setLoading(false);
   };
 
   return (
@@ -80,7 +87,7 @@ export default function CartItem({ cartItem, updateQty, onRemove }) {
         <div className="mt-3 flex items-center gap-2">
           <button
             onClick={onDecrease}
-            disabled={quantity <= 1}
+            disabled={quantity <= 1 || loading}
             className="btn btn-sm btn-outline"
           >
             <FaMinus />
@@ -90,7 +97,7 @@ export default function CartItem({ cartItem, updateQty, onRemove }) {
 
           <button
             onClick={onIncrease}
-            // disabled={quantity >= 10}
+            disabled={loading}
             className="btn btn-sm btn-outline"
           >
             <FaPlus />
