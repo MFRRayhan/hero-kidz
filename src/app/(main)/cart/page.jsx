@@ -9,9 +9,6 @@ export default async function Cart() {
 
   return (
     <div className="space-y-3">
-      <h2 className="text-4xl border-l-7 pl-4 py-4 border-primary rounded-md">
-        My Cart
-      </h2>
       <ClientCart cartItems={cartItems} />
     </div>
   );

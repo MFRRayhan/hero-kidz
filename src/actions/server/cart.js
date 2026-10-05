@@ -92,7 +92,7 @@ export const incrementCartItem = async (id, quantity) => {
     };
   }
 
-  const query = { _id: new ObjectId(id) };
+  const query = { _id: new ObjectId(id), email: user.email };
   const updateOne = {
     $inc: {
       quantity: 1,
@@ -115,7 +115,7 @@ export const decrementCartItem = async (id, quantity) => {
     };
   }
 
-  const filter = { _id: new ObjectId(id) };
+  const filter = { _id: new ObjectId(id), email: user.email };
   const update = {
     $inc: {
       quantity: -1,
