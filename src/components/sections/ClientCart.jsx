@@ -13,6 +13,12 @@ export default function ClientCart({ cartItems = [] }) {
     setItems((prevItems) => prevItems.filter((item) => item._id !== id));
   };
 
+  const updateQty = (id, quantity) => {
+    setItems((prevItems) =>
+      prevItems.map((item) => (item._id === id ? { ...item, quantity } : item)),
+    );
+  };
+
   return (
     <>
       <p>
@@ -27,6 +33,7 @@ export default function ClientCart({ cartItems = [] }) {
               key={cartItem._id.toString()}
               cartItem={cartItem}
               onRemove={handleRemove}
+              updateQty={updateQty}
             ></CartItem>
           ))}
         </div>

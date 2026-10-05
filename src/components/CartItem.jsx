@@ -1,17 +1,16 @@
 "use client";
 
-import { removeCartItem } from "@/actions/server/cart";
+import {
+  decrementCartItem,
+  incrementCartItem,
+  removeCartItem,
+} from "@/actions/server/cart";
 import Image from "next/image";
 import { FaMinus, FaPlus, FaTrash } from "react-icons/fa";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
 import Swal from "sweetalert2";
 
-export default function CartItem({
-  cartItem,
-  onIncrease,
-  onDecrease,
-  onRemove,
-}) {
+export default function CartItem({ cartItem, updateQty, onRemove }) {
   const { title, image, price, quantity, _id } = cartItem;
 
   const handleRemoveCartItem = async () => {
@@ -40,6 +39,22 @@ export default function CartItem({
     });
   };
 
+  const onIncrease = async () => {
+    const result = await incrementCartItem(_id, quantity);
+
+    if (result.success) {
+      updateQty(_id, quantity + 1);
+    }
+  };
+
+  const onDecrease = async () => {
+    const result = await decrementCartItem(_id, quantity);
+
+    if (result.success) {
+      updateQty(_id, quantity - 1);
+    }
+  };
+
   return (
     <div className="flex items-center gap-4 rounded-xl border border-base-300 bg-base-100 p-4 shadow-sm mb-5">
       {/* Product Image */}
@@ -58,7 +73,7 @@ export default function CartItem({
         {/* Quantity Controls */}
         <div className="mt-3 flex items-center gap-2">
           <button
-            onClick={() => onDecrease(cartItem)}
+            onClick={onDecrease}
             disabled={quantity <= 1}
             className="btn btn-sm btn-outline"
           >
@@ -67,10 +82,7 @@ export default function CartItem({
 
           <span className="min-w-8 text-center font-semibold">{quantity}</span>
 
-          <button
-            onClick={() => onIncrease(cartItem)}
-            className="btn btn-sm btn-outline"
-          >
+          <button onClick={onIncrease} className="btn btn-sm btn-outline">
             <FaPlus />
           </button>
         </div>
