@@ -5,6 +5,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
 
 import CartItem from "../CartItem";
+import Link from "next/link";
 
 export default function ClientCart({ cartItems = [] }) {
   const [items, setItems] = useState(cartItems);
@@ -101,9 +102,9 @@ export default function ClientCart({ cartItems = [] }) {
               </div>
             </div>
 
-            <button className="btn btn-primary mt-6 w-full">
+            <Link href={"/checkout"} className="btn btn-primary mt-6 w-full">
               Proceed to Checkout
-            </button>
+            </Link>
           </div>
         </div>
       )}
