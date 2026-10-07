@@ -6,7 +6,7 @@ export default async function Checkout() {
   const cartItems = await getCartItems();
 
   return (
-    <div>
+    <div className="space-y-3">
       <ClientCheckout cartItems={cartItems}></ClientCheckout>
     </div>
   );
