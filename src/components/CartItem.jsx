@@ -6,6 +6,7 @@ import {
   removeCartItem,
 } from "@/actions/server/cart";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaMinus, FaPlus, FaSpinner, FaTrash } from "react-icons/fa";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
@@ -15,6 +16,8 @@ export default function CartItem({ cartItem, updateQty, onRemove }) {
   const { title, image, price, quantity, _id } = cartItem;
   const [loading, setLoading] = useState(false);
   const [removeLoading, setRemoveLoading] = useState(false);
+  const router = useRouter();
+
   const handleRemoveCartItem = async () => {
     const swalResult = await Swal.fire({
       title: "Remove product?",
@@ -36,6 +39,7 @@ export default function CartItem({ cartItem, updateQty, onRemove }) {
 
       if (result.success) {
         onRemove(_id);
+        router.refresh();
 
         Swal.fire({
           title: "Removed!",

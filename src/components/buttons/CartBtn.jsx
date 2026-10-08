@@ -50,6 +50,7 @@ export default function CartBtn({ product }) {
           timerProgressBar: true,
         });
         setIsLoading(false);
+        router.refresh();
       } else {
         Swal.fire({
           icon: "error",
