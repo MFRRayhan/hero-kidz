@@ -5,7 +5,8 @@ import { FaBangladeshiTakaSign } from "react-icons/fa6";
 import CartBtn from "../buttons/CartBtn";
 
 export default function ProductCard({ product }) {
-  const { _id, title, image, price, discount, reviews, ratings } = product;
+  const { _id, title, image, price, discount, reviews, ratings, sold } =
+    product;
 
   const discountedPrice = price - (price * discount) / 100;
 
@@ -55,16 +56,34 @@ export default function ProductCard({ product }) {
         </div>
 
         {/* Price */}
-        <div className="flex items-center gap-2">
-          <span className="text-xl font-bold text-primary flex  items-center">
-            <FaBangladeshiTakaSign /> {discountedPrice.toFixed(0)}
-          </span>
-
-          {discount > 0 && (
-            <span className="text-sm line-through text-base-content/50 flex  items-center">
-              <FaBangladeshiTakaSign /> {price}
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          {/* Price */}
+          <div className="flex min-w-0 items-end gap-2">
+            <span className="flex items-center gap-0.5 text-xl font-bold leading-none text-primary sm:text-2xl">
+              <FaBangladeshiTakaSign className="text-base sm:text-lg" />
+              {discountedPrice.toFixed(0)}
             </span>
-          )}
+
+            {discount > 0 && (
+              <span className="flex items-center gap-0.5 pb-0.5 text-xs font-medium text-base-content/50 line-through sm:text-sm">
+                <FaBangladeshiTakaSign className="text-[10px] sm:text-xs" />
+                {price}
+              </span>
+            )}
+
+            {discount > 0 && (
+              <span className="rounded-full bg-error/10 px-2 py-0.5 text-[10px] font-semibold text-error sm:text-xs">
+                -{discount}%
+              </span>
+            )}
+          </div>
+
+          {/* Sold */}
+          <div className="shrink-0">
+            <span className="rounded-full bg-base-200 px-2.5 py-1 text-xs font-medium text-base-content/70 sm:text-sm">
+              <span className="font-semibold text-primary">{sold}</span> sold
+            </span>
+          </div>
         </div>
 
         <div className="space-y-4">
