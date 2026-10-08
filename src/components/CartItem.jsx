@@ -5,22 +5,16 @@ import {
   incrementCartItem,
   removeCartItem,
 } from "@/actions/server/cart";
-
 import Image from "next/image";
 import { useState } from "react";
-
 import { FaMinus, FaPlus, FaSpinner, FaTrash } from "react-icons/fa";
-
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
-
 import Swal from "sweetalert2";
 
 export default function CartItem({ cartItem, updateQty, onRemove }) {
   const { title, image, price, quantity, _id } = cartItem;
-
   const [loading, setLoading] = useState(false);
   const [removeLoading, setRemoveLoading] = useState(false);
-
   const handleRemoveCartItem = async () => {
     const swalResult = await Swal.fire({
       title: "Remove product?",

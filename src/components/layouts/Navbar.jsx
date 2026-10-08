@@ -4,8 +4,11 @@ import NavLink from "../NavLink";
 import { IoCartOutline } from "react-icons/io5";
 import Link from "next/link";
 import AuthBtns from "../buttons/AuthBtns";
+import { getCartItems } from "@/actions/server/cart";
+import HeaderCart from "../buttons/HeaderCart";
 
-export default function Navbar() {
+export default async function Navbar() {
+  const cartItems = await getCartItems();
   const navItems = (
     <>
       <li>
@@ -57,10 +60,10 @@ export default function Navbar() {
         <ul className="menu menu-horizontal px-1">{navItems}</ul>
       </div>
       <div className="navbar-end gap-2">
-        <Link href={"/cart"} className="btn btn-primary">
-          <IoCartOutline className="text-2xl"></IoCartOutline>
-        </Link>
-        <AuthBtns />
+        <HeaderCart cartItems={cartItems} />
+
+        {/* Authentication */}
+        <AuthBtns cartItems={cartItems} />
       </div>
     </div>
   );
