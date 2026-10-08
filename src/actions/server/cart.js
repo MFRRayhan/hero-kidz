@@ -125,3 +125,13 @@ export const decrementCartItem = async (id, quantity) => {
 
   return { success: Boolean(result.modifiedCount) };
 };
+
+export const clearCart = async () => {
+  const { user } = (await getServerSession(authOptions)) || {};
+  if (!user) return [];
+
+  const query = { email: user?.email };
+  const result = await cartCollections.deleteMany(query);
+
+  return { success: Boolean(result.deletedCount) };
+};

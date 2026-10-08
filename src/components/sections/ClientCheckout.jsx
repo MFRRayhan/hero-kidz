@@ -1,5 +1,8 @@
 "use client";
 
+import { createOrder } from "@/actions/server/order";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 import {
@@ -13,9 +16,12 @@ import {
 } from "react-icons/bi";
 
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
+import Swal from "sweetalert2";
 
 export default function ClientCheckout({ cartItems = [] }) {
   const [items] = useState(cartItems);
+  const session = useSession();
+  const router = useRouter();
 
   const [form, setForm] = useState({
     name: "",
@@ -44,12 +50,28 @@ export default function ClientCheckout({ cartItems = [] }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Checkout:", form, cartItems);
+    const payload = {
+      name: e.target.name.value,
+      email: e.target.name.email,
+      contactNo: e.target.name.contactNo,
+      deliveryInfo: e.target.name.deliveryInfo,
+      specialInstruction: e.target.name.specialInstruction,
+    };
 
-    alert("Form submitted");
+    const result = await createOrder(payload);
+
+    if (result.success) {
+      Swal.fire("success", "Order Added", "success");
+      router.push("/");
+
+      e.target.reset();
+    } else {
+      Swal.fire("error", "Something went wrong!", "error");
+      router.push("/cart");
+    }
   };
 
   return (
@@ -114,10 +136,12 @@ export default function ClientCheckout({ cartItems = [] }) {
                       <input
                         type="text"
                         name="name"
-                        value={form.name}
-                        onChange={handleChange}
-                        placeholder="John Doe"
-                        required
+                        value={session?.data?.user?.name}
+                        // value={form.name}
+                        // onChange={handleChange}
+                        // placeholder="John Doe"
+                        // required
+                        readOnly
                         className="grow"
                       />
                     </label>
@@ -135,10 +159,12 @@ export default function ClientCheckout({ cartItems = [] }) {
                       <input
                         type="email"
                         name="email"
-                        value={form.email}
-                        onChange={handleChange}
-                        placeholder="john@doe.com"
-                        required
+                        value={session?.data?.user?.email}
+                        // value={form.email}
+                        // onChange={handleChange}
+                        // placeholder="john@doe.com"
+                        // required
+                        readOnly
                         className="grow"
                       />
                     </label>
@@ -265,10 +291,12 @@ export default function ClientCheckout({ cartItems = [] }) {
                       </p>
                     </div>
 
-                    <p className="flex shrink-0 items-center gap-0.5 text-sm font-semibold">
-                      <FaBangladeshiTakaSign />
-                      {item.price * item.quantity}
-                    </p>
+                    <div>
+                      <p className="flex shrink-0 items-center gap-0.5 text-sm font-semibold">
+                        <FaBangladeshiTakaSign />
+                        {item.price * item.quantity}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
